@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  <!-- Bootstrap core CSS -->
+  <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link href='static/vendor/bootstrap/css/bootstrap.min.css' rel="stylesheet">
+
+
+  <!-- Custom styles for this template -->
+  <link href="static/css/shop-homepage.css" rel="stylesheet">
+  <style>
+    input[type="radio"] {
+      margin-top: 7px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+  </style>
+
+
+  <script>
+    function update_display(elem) {
+      switch (elem.getAttribute("id")) {
+        case "genre_option":
+          document.getElementById("Genre").setAttribute("style", "")
+          document.getElementById("Username").setAttribute("style", "display: none")
+          document.getElementById("TweetID").setAttribute("style", "display: none")
+          document.getElementById("Date").setAttribute("style", "display: none")
+          break;
+        case "username_option":
+          document.getElementById("Genre").setAttribute("style", "display: none")
+          document.getElementById("Username").setAttribute("style", "")
+          document.getElementById("TweetID").setAttribute("style", "display: none")
+          document.getElementById("Date").setAttribute("style", "display: none")
+          break;
+        case "tweetid_option":
+          document.getElementById("Genre").setAttribute("style", "display: none")
+          document.getElementById("Username").setAttribute("style", "display: none")
+          document.getElementById("TweetID").setAttribute("style", "")
+          document.getElementById("Date").setAttribute("style", "display: none")
+          break;
+        case "date_option":
+          document.getElementById("Genre").setAttribute("style", "display: none")
+          document.getElementById("Username").setAttribute("style", "display: none")
+          document.getElementById("TweetID").setAttribute("style", "display: none")
+          document.getElementById("Date").setAttribute("style", "")
+          break;
+      }
+    }
+
+    function update_tweetid_option(elem) {
+      switch (elem.getAttribute("id")) {
+        case "select_single_tweetID":
+          document.getElementById("single_tweet_id").setAttribute("style", "")
+          document.getElementById("range_id").setAttribute("style", "display: none")
+          break;
+        case "select_range":
+          document.getElementById("single_tweet_id").setAttribute("style", "display: none")
+          document.getElementById("range_id").setAttribute("style", "")
+          break;
+      }
+
+      document.getElementById("tweetid_category").value = elem.value
+    }
+
+    function update_cache_status(elem){
+      if (elem.checked){
+          document.getElementsByName("cache_is_enabled").forEach((e) => {e.value = "True"})
+      }
+      else{
+        document.getElementsByName("cache_is_enabled").forEach((e) => {e.value = "False"})
+      }
+    }
+
+    // function on_submit()
+
+  </script>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="margin-bottom: 500px;">
+    <div class="container">
+      <a class="navbar-brand" href="#">Twitter Application</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container" style="margin-top: 50px ;">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="list-group">
+          <a href="#" class="list-group-item" id="genre_option" onclick="update_display(this)">Search by Genre</a>
+          <a href="#" class="list-group-item" id="username_option" onclick="update_display(this)">Search by Username</a>
+          <a href="#" class="list-group-item" id="tweetid_option" onclick="update_display(this)">Search by TweetID</a>
+          <a href="#" class="list-group-item" id="date_option" onclick="update_display(this)">Search by Date</a>
+
+          <div class="row col-12" style="margin-top:18px; margin-left: 2px;">
+            <div class="custom-control custom-switch" style="margin-bottom: 0px;">
+              <input type="checkbox" class="custom-control-input" id="customSwitches" onchange="update_cache_status(this)" checked>
+              <label class="custom-control-label" style="margin-bottom: 20px;" for="customSwitches">Enable
+                Cache</label>
+            </div>
+          </div>
+          <div class="row col-12" style="margin-top:18px; margin-left: 2px;">
+            <div class="text" style="margin-bottom: 0px;">
+              {% if exec_time %}
+              <label style="margin-bottom: 20px;" for="customSwitches">Execution Time {{ exec_time}}</label><br/>
+              <label style="margin-bottom: 20px;" for="customSwitches">Hit Rate {{ hit_rate}}</label>
+              {% endif %}
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- /.col-lg-3 -->
+
+
+      <div class="col-lg-9 justify-content-center">
+        
+        <div id="Genre" {{ 'style="display: none;"' if columns }}>
+          <div class="row">
+            <h2>Please select the genre</h2>
+          </div>
+          <form>
+            <input type="hidden" name="query_type" value="genre" />
+            <input type="hidden" name="cache_is_enabled" value="True" />
+            <div class="row">
+              <!-- Default unchecked -->
+              <div class="row col-12" style="margin-top: 10px;">
+                <input type="radio" id="Rock" name="genre_radio_button" value="Rock">
+                <label>Rock</label>
+              </div>
+              <div class="row col-12" style="margin-top: 10px;">
+                <input type="radio" id="Rap" name="genre_radio_button" value="Rap">
+                <label>Rap</label>
+              </div>
+              <div class="row col-12" style="margin-top: 10px;">
+                <input type="radio" id="Pop" name="genre_radio_button" value="Pop">
+                <label>Pop</label>
+              </div>
+              <div class="row col-12" style="margin-top: 10px;">
+                <input type="radio" id="Instrumental" name="genre_radio_button" value="Instrumental">
+                <label>Instrumental</label>
+              </div>
+            </div>
+            <div class="row col-12" style="margin-top: 10px;">
+              <div class="row" style="margin-top: 15px;">
+                <input type="submit" class="btn btn-primary" style="margin-left: 40px;">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="Username" style="display: none;">
+          <div class="row">
+            <h2>Enter Username</h2>
+          </div>
+          <form>
+            <input type="hidden" name="query_type" value="username" />
+            <input type="hidden" name="cache_is_enabled" value="True" />
+            <div class="row">
+              <div class="form-group">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+              </div>
+              <div class="row col-12" style="margin-top: 10px;">
+                <div class="row" style="margin-top: 15px;">
+                  <!-- <button type="button" class="btn btn-primary" style="margin-left: 40px;">Submit</button> -->
+                  <input type="submit" class="btn btn-primary" style="margin-left: 40px;">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="TweetID" style="display: none;">
+          <div class="row">
+            <h3>
+              Select option
+            </h3>
+          </div>
+          <form>
+            <input type="hidden" name="cache_is_enabled" value="True" />
+            <!-- TODO: Update based on radi button onchanged event -->
+            <input type="hidden" id="tweetid_category" name="query_type" value="tweetid_single" />
+            <div class="row col-12" style="margin-top: 10px;">
+              <input type="radio" onchange="update_tweetid_option(this)" id="select_single_tweetID"
+                name="tweetid_radio_button" value="single_tweetid" checked>
+              <label>Select single tweetID</label>
+            </div>
+            <div class="row col-12" style="margin-top: 10px;">
+              <input type="radio" onchange="update_tweetid_option(this)" id="select_range" value="select_range" name="tweetid_radio_button">
+              <label>select_range</label>
+              <div class="row col-12" id="single_tweet_id" style="margin-top: 10px;">
+                <input type="number" name="tweet_id" class="form-control col-4" placeholder="Enter TweetID">
+              </div>
+              <div class="row col-12" id="range_id" style="margin-top: 10px; display: none;">
+                <input type="number"  class="form-control col-4" id="lower_range" name="lower_range"
+                  placeholder="Enter lower range TweetID">
+                <input type="number" style="margin-left: 28px ;" class="form-control col-4" id="upper_range" name="upper_range"
+                  placeholder="Enter upper range TweetID">
+              </div>
+
+              <div class="row col-12" style="margin-top: 10px;">
+                <div class="row" style="margin-top: 15px;">
+                  <input type="submit" class="btn btn-primary" style="margin-left: 40px;">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="Date" style="display: none;">
+          <h6>
+            Enter starting date:
+          </h6>
+          <form>
+            <input type="hidden" name="query_type" value="date" />
+            <input type="hidden" name="cache_is_enabled" value="True" />
+            <div class="input-group">
+              <input type="date" class="input-group-text" name="start_date" id="start_date" placeholder="start_date">
+            </div>
+            <h6 style="margin-top: 15px;">
+              Enter ending date:
+            </h6>
+            <div class="input-group" style="margin-top: 15px;">
+              <input type="date" class="input-group-text" name="end_date"  id="end_date" placeholder="end_date" style="display: bl;">
+            </div>
+            <div class="row" style="margin-top: 15px;">
+              <input type="submit" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </div>
+
+        {% if columns %}
+        <div id="display_results" style="margin-top: 50px;">
+          <h5>Results</h5>
+          <table class="table">
+            <thead>
+            <tr>
+                {% for col in columns %}
+                <th scope="col">{{ col }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody id="body_of_table" style="height: 200px; overflow: auto;">
+            <!-- <div class="d-flex justify-content-center" id="spinner" style="display: none">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div> -->
+            {% for tup in data.iterrows() %}
+            <tr>
+                {% for item in tup[1].to_list() %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+
+  <!-- /.col-lg-9 -->
+
+  </div>
+  <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy Shanmukha, 2020</p>
+    </div>
+    <!-- /.container -->
+  </nav>
+  </div>
+  <!-- Bootstrap core JavaScript -->
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
